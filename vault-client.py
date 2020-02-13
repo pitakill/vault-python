@@ -8,6 +8,7 @@ client = hvac.Client(
 
 if not client.is_authenticated():
     print("Can't communicate with Vault")
+    exit()
 
 status = client.sys.read_health_status(method='GET')
 print(status)
