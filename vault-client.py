@@ -1,14 +1,13 @@
-import hvac
 import os
 
-client = hvac.Client(
-    url=os.environ['VAULT_ADDR'],
-    token=os.environ['VAULT_TOKEN'],
-)
+from lib.vault import Vault
 
-if not client.is_authenticated():
-    print("Can't communicate with Vault")
-    exit()
+addr = os.environ['VAULT_ADDR']
+token = os.environ['VAULT_TOKEN']
 
-status = client.sys.read_health_status(method='GET')
-print(status)
+vault = Vault(addr, token)
+
+print(vault.get_status())
+
+if vault.is_root():
+    print('Please use a token without such a power, you are using a token with root capabilities')
