@@ -1,0 +1,22 @@
+version: '3'
+services:
+    client:
+        depends_on:
+          - vault
+        build:
+          context: ./
+          dockerfile: Dockerfile
+        environment:
+            - VAULT_ADDR=http://vault:8200
+            - VAULT_TOKEN=mytoken
+        links:
+            - "vault"
+    vault:
+        image: vault
+        ports:
+          - "8200:8200"
+        environment:
+          - VAULT_ADDR=http://0.0.0.0:8200
+        cap_add:
+          - IPC_LOCK
+        command: vault server -dev -dev-root-token-id="mytoken" -dev-listen-address="0.0.0.0:8200"
